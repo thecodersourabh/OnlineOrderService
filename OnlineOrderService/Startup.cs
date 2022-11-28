@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using OnlineOrder.BusinessServices;
 using OnlineOrder.BusinessServices.Interfaces;
 using OnlineOrderService.Data;
+using OrderServiceRepository;
+using OrderServiceRepository.Interface;
 
 namespace OnlineOrderService
 {
@@ -25,7 +28,17 @@ namespace OnlineOrderService
             services.AddControllers();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICustomerRepo, CustomerRepo>();
 
+            services.AddSwaggerGen(swagger =>
+            {
+                //This is to generate the Default UI of Swagger Documentation  
+                swagger.SwaggerDoc("v1" , new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Online Service"
+                });
+            });
             services.AddDbContext<OnlineOrderServiceContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SqlConnectionString")));
         }
@@ -39,7 +52,13 @@ namespace OnlineOrderService
             }
 
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                var swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+                c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Online Service API v1");
 
+            });
             app.UseRouting();
 
             app.UseAuthorization();
