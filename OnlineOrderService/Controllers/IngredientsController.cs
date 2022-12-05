@@ -1,37 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OnlineOrder.Models;
-using OnlineOrderService.Data;
+using OnlineOrder.BusinessServices.Interfaces;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineOrderService.Controllers
 {
+    [ApiController]
+    [Route("[controller]/[action]")]
     public class IngredientsController : Controller
     {
-        private readonly OnlineOrderServiceContext _context;
+        private readonly IIngredientService _ingredientService;
 
-        public IngredientsController(OnlineOrderServiceContext context)
+        public IngredientsController(IIngredientService ingredientService)
         {
-            _context = context;
+            _ingredientService = ingredientService;
         }
 
         // GET: Ingredients
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public IActionResult GetAllIngredients()
         {
-            return Ok(await _context.Ingredients.ToListAsync());
+            return Ok(_ingredientService.GetAllIngredients());
         }
 
-        // GET: Ingredients/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Ingredients/Details/Extra toppings
+        [HttpGet]
+        public IActionResult GetAllIngredientsDetailsByName(string name)
         {
-            if (id == null)
+            if (name == null)
             {
                 return NotFound();
             }
 
-            var ingredients = await _context.Ingredients
-                .FirstOrDefaultAsync(m => m.IngredientsId == id);
+            var ingredients =  _ingredientService.GetAllIngredients()
+                .FirstOrDefault(m => m.IngredientsName == name);
             if (ingredients == null)
             {
                 return NotFound();
@@ -40,111 +41,7 @@ namespace OnlineOrderService.Controllers
             return Ok(ingredients);
         }
 
-        // GET: Ingredients/Create
-        public IActionResult Create()
-        {
-            return Ok();
-        }
-
-        // POST: Ingredients/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IngredientsId,IngredientsName,PreferenceLevel,ItemId,Cost")] Ingredients ingredients)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(ingredients);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return Ok(ingredients);
-        }
-
-        // GET: Ingredients/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ingredients = await _context.Ingredients.FindAsync(id);
-            if (ingredients == null)
-            {
-                return NotFound();
-            }
-            return Ok(ingredients);
-        }
-
-        // POST: Ingredients/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IngredientsId,IngredientsName,PreferenceLevel,ItemId,Cost")] Ingredients ingredients)
-        {
-            if (id != ingredients.IngredientsId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(ingredients);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!IngredientsExists(ingredients.IngredientsId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return Ok(nameof(Index));
-            }
-            return Ok(ingredients);
-        }
-
-        // GET: Ingredients/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var ingredients = await _context.Ingredients
-                .FirstOrDefaultAsync(m => m.IngredientsId == id);
-            if (ingredients == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(ingredients);
-        }
-
-        // POST: Ingredients/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var ingredients = await _context.Ingredients.FindAsync(id);
-            _context.Ingredients.Remove(ingredients);
-            await _context.SaveChangesAsync();
-            return Ok(nameof(Index));
-        }
-
-        private bool IngredientsExists(int id)
-        {
-            return _context.Ingredients.Any(e => e.IngredientsId == id);
-        }
     }
+
+    
 }

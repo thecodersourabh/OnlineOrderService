@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineOrder.BusinessServices.Interfaces;
-using OnlineOrder.Models;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineOrderService.Controllers
 {
+    [ApiController]
+    [Route("[controller]/[action]")]
     public class CustomersController : Controller
     {
         private readonly ICustomerService _service;
@@ -16,13 +16,15 @@ namespace OnlineOrderService.Controllers
         }
 
         // GET: Customers
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult getAllCustomers()
         {
             return Ok(_service.GetAll());
         }
 
         // GET: Customers/Details/5
-        public IActionResult Details(string id)
+        [HttpGet]
+        public IActionResult getCustomerDetailsById(string id)
         {
             if (id == null)
             {
@@ -39,45 +41,7 @@ namespace OnlineOrderService.Controllers
             return Ok(customer);
         }
 
-        // GET: Customers/Create
-        public IActionResult Create()
-        {
-            return Ok();
-        }
+       
 
-        // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("CustomerId,MobileNumber,Address,EmailId,OtherDetails")] Customer customer)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(customer);
-        //        await _context.SaveChangesAsync();
-        //        return Ok(nameof(Index));
-        //    }
-        //    return Ok(customer);
-        //}
-
-        //// GET: Customers/Edit/5
-        //public async Task<IActionResult> Edit(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var customer = await _context.Customer.FindAsync(id);
-        //    if (customer == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(customer);
-        //}
-
-     
-     
     }
 }

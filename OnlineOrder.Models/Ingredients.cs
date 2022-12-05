@@ -6,7 +6,7 @@ namespace OnlineOrder.Models
 {
     public class Ingredients
     {
-        public int IngredientsId { get; set; }
+        public string IngredientsId { get; set; }
         public string IngredientsName { get; set; }
         public string PreferenceLevel { get; set; }
         public string ItemId { get; set; }
