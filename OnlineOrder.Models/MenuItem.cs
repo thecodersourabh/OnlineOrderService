@@ -4,9 +4,9 @@ using System.Text;
 
 namespace OnlineOrder.Models
 {
-    public class MenuItem
+    public class Item
     {
-        public string MenuItemId { get; set; }
+        public string ItemId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }

@@ -13,7 +13,7 @@ namespace OnlineOrderService.Data
 
         public DbSet<OnlineOrder.Models.Customer> Customer { get; set; }
 
-        public DbSet<OnlineOrder.Models.MenuItem> MenuItem { get; set; }
+        public DbSet<OnlineOrder.Models.Item> MenuItem { get; set; }
 
         public DbSet<OnlineOrder.Models.Ingredients> Ingredients { get; set; }
     }

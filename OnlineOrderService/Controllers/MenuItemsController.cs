@@ -33,7 +33,7 @@ namespace OnlineOrderService.Controllers
             }
 
             var menuItem = _menuItems.GetMenuItems()
-                .FirstOrDefault(m => m.MenuItemId == id);
+                .FirstOrDefault(m => m.ItemId == id);
             if (menuItem == null)
             {
                 return NotFound();

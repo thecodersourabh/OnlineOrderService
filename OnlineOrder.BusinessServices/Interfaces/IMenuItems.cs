@@ -5,6 +5,6 @@ namespace OnlineOrder.BusinessServices.Interfaces
 {
     public interface IMenuItems
     {
-        List<MenuItem> GetMenuItems();
+        List<Item> GetMenuItems();
     }
 }
